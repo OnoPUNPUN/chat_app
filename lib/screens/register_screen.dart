@@ -2,20 +2,22 @@ import 'package:chat_app/widgets/my_buttons.dart';
 import 'package:chat_app/widgets/my_textfeild.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatelessWidget {
+class RegisterScreen extends StatelessWidget {
 
   // Email & passowrd controller
   final TextEditingController _emailTEcontroller = TextEditingController();
   final TextEditingController _passwordTEcontroller = TextEditingController();
+  final TextEditingController _confirmPasswordTEcontroller = TextEditingController();
 
   // tap to go another rounte
   final void Function()? onTap;
 
+  RegisterScreen({super.key, required this.onTap});
 
-  LoginScreen({super.key, required this.onTap});
+  // Register method
+  void register () {
 
-  //login method
-  void login() {}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +39,7 @@ class LoginScreen extends StatelessWidget {
         
             // welcome back message
             Text(
-              "Welcome Back You've missed",
+              "Let's create an account for you",
               style: TextStyle(
                 color: Theme.of(context).colorScheme.primary,
                 fontSize: 16,
@@ -47,8 +49,8 @@ class LoginScreen extends StatelessWidget {
             const SizedBox(height: 25,),
             // email textfeild
             MyTextfeild(
-              hintText: 'Email', 
-              obscureText: false, 
+              hintText: 'Email',
+              obscureText: false,
               controller: _emailTEcontroller
             ),
 
@@ -61,10 +63,19 @@ class LoginScreen extends StatelessWidget {
               controller: _passwordTEcontroller
             ),
 
+            const SizedBox(height: 10,),
+
+            // confirm password
+            MyTextfeild(
+              hintText: 'Confirm Password',
+              obscureText: true,
+              controller: _confirmPasswordTEcontroller
+            ),
+
             const SizedBox(height: 25,),
         
             // login button
-            MyButtons(buttonTitle: 'Login', onTap: login,),
+            MyButtons(buttonTitle: 'Register', onTap: (){},),
 
             const SizedBox(height: 25,),
         
@@ -72,13 +83,13 @@ class LoginScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Not a member?", style: TextStyle(
+                Text("Alredy Have an account?", style: TextStyle(
                     color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
                 GestureDetector(
                   onTap: onTap,
-                  child: Text(" Register now", style: TextStyle(
+                  child: Text(" Login Now", style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).colorScheme.inversePrimary,
                     ),
