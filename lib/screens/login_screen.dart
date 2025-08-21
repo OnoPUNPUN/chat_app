@@ -1,36 +1,36 @@
 import 'package:chat_app/auth/auth_service.dart';
+import 'package:chat_app/auth/error_handler.dart';
 import 'package:chat_app/widgets/my_buttons.dart';
 import 'package:chat_app/widgets/my_textfeild.dart';
+
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {
-  // Email & passowrd controller
   final TextEditingController _emailTEcontroller = TextEditingController();
   final TextEditingController _passwordTEcontroller = TextEditingController();
 
-  // tap to go another rounte
   final void Function()? onTap;
 
   LoginScreen({super.key, required this.onTap});
 
-  //login method
   void login(BuildContext context) async {
-    // auth service
     final AuthService authService = AuthService();
 
-    // try login
     try {
+      showLoadingDialog(context);
+
       await authService.signInWithEmailPassword(
         _emailTEcontroller.text,
         _passwordTEcontroller.text,
       );
-    }
-    // catch any errors
-    catch (e) {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(title: Text(e.toString())),
+
+      Navigator.pop(context); // close loading
+    } catch (e) {
+      Navigator.pop(context); // close loading first
+      String errorMessage = getAuthErrorMessage(
+        e.toString().replaceAll("Exception: ", ""),
       );
+      showErrorSnackBar(context, errorMessage);
     }
   }
 
@@ -42,16 +42,12 @@ class LoginScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // logo
             Icon(
               Icons.message,
               size: 60,
               color: Theme.of(context).colorScheme.primary,
             ),
-
             const SizedBox(height: 50),
-
-            // welcome back message
             Text(
               "Welcome Back You've missed",
               style: TextStyle(
@@ -59,32 +55,21 @@ class LoginScreen extends StatelessWidget {
                 fontSize: 16,
               ),
             ),
-
             const SizedBox(height: 25),
-            // email textfeild
             MyTextfeild(
               hintText: 'Email',
               obscureText: false,
               controller: _emailTEcontroller,
             ),
-
             const SizedBox(height: 10),
-
-            // password textfeild
             MyTextfeild(
               hintText: 'Password',
               obscureText: true,
               controller: _passwordTEcontroller,
             ),
-
             const SizedBox(height: 25),
-
-            // login button
             MyButtons(buttonTitle: 'Login', onTap: () => login(context)),
-
             const SizedBox(height: 25),
-
-            // register now
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

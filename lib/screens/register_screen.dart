@@ -1,22 +1,46 @@
+import 'package:chat_app/auth/auth_service.dart';
+import 'package:chat_app/auth/error_handler.dart';
 import 'package:chat_app/widgets/my_buttons.dart';
 import 'package:chat_app/widgets/my_textfeild.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
 class RegisterScreen extends StatelessWidget {
-
-  // Email & passowrd controller
   final TextEditingController _emailTEcontroller = TextEditingController();
   final TextEditingController _passwordTEcontroller = TextEditingController();
-  final TextEditingController _confirmPasswordTEcontroller = TextEditingController();
+  final TextEditingController _confirmPasswordTEcontroller =
+      TextEditingController();
 
-  // tap to go another rounte
   final void Function()? onTap;
 
   RegisterScreen({super.key, required this.onTap});
 
-  // Register method
-  void register () {
+  void register(BuildContext context) async {
+    final _auth = AuthService();
 
+    if (_passwordTEcontroller.text == _confirmPasswordTEcontroller.text &&
+        EmailValidator.validate(_emailTEcontroller.text)) {
+      try {
+        showLoadingDialog(context);
+
+        await _auth.signUpWithEmailPassword(
+          _emailTEcontroller.text,
+          _passwordTEcontroller.text,
+        );
+
+        Navigator.pop(context); // close loading
+      } catch (e) {
+        Navigator.pop(context); // close loading first
+        String errorMessage = getAuthErrorMessage(
+          e.toString().replaceAll("Exception: ", ""),
+        );
+        showErrorSnackBar(context, errorMessage);
+      }
+    } else if (!EmailValidator.validate(_emailTEcontroller.text)) {
+      showErrorSnackBar(context, "Enter a valid email address.");
+    } else {
+      showErrorSnackBar(context, "Passwords didn't match.");
+    }
   }
 
   @override
@@ -27,17 +51,12 @@ class RegisterScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // logo
             Icon(
-              Icons.message, 
+              Icons.message,
               size: 60,
               color: Theme.of(context).colorScheme.primary,
-
             ),
-
-            const SizedBox(height: 50,),
-        
-            // welcome back message
+            const SizedBox(height: 50),
             Text(
               "Let's create an account for you",
               style: TextStyle(
@@ -45,51 +64,41 @@ class RegisterScreen extends StatelessWidget {
                 fontSize: 16,
               ),
             ),
-
-            const SizedBox(height: 25,),
-            // email textfeild
+            const SizedBox(height: 25),
             MyTextfeild(
               hintText: 'Email',
               obscureText: false,
-              controller: _emailTEcontroller
+              controller: _emailTEcontroller,
             ),
-
-            const SizedBox(height: 10,),
-            
-            // password textfeild
+            const SizedBox(height: 10),
             MyTextfeild(
               hintText: 'Password',
               obscureText: true,
-              controller: _passwordTEcontroller
+              controller: _passwordTEcontroller,
             ),
-
-            const SizedBox(height: 10,),
-
-            // confirm password
+            const SizedBox(height: 10),
             MyTextfeild(
               hintText: 'Confirm Password',
               obscureText: true,
-              controller: _confirmPasswordTEcontroller
+              controller: _confirmPasswordTEcontroller,
             ),
-
-            const SizedBox(height: 25,),
-        
-            // login button
-            MyButtons(buttonTitle: 'Register', onTap: (){},),
-
-            const SizedBox(height: 25,),
-        
-            // register now
+            const SizedBox(height: 25),
+            MyButtons(buttonTitle: 'Register', onTap: () => register(context)),
+            const SizedBox(height: 25),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Alredy Have an account?", style: TextStyle(
+                Text(
+                  "Already have an account?",
+                  style: TextStyle(
                     color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
                 GestureDetector(
                   onTap: onTap,
-                  child: Text(" Login Now", style: TextStyle(
+                  child: Text(
+                    " Login Now",
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).colorScheme.inversePrimary,
                     ),
