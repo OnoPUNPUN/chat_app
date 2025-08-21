@@ -4,14 +4,12 @@ import 'package:chat_app/widgets/my_textfeild.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {
-
   // Email & passowrd controller
   final TextEditingController _emailTEcontroller = TextEditingController();
   final TextEditingController _passwordTEcontroller = TextEditingController();
 
   // tap to go another rounte
   final void Function()? onTap;
-
 
   LoginScreen({super.key, required this.onTap});
 
@@ -22,18 +20,18 @@ class LoginScreen extends StatelessWidget {
 
     // try login
     try {
-      await authService.signInWithEmailPassword(_emailTEcontroller.text, _passwordTEcontroller.text);
-    } 
+      await authService.signInWithEmailPassword(
+        _emailTEcontroller.text,
+        _passwordTEcontroller.text,
+      );
+    }
     // catch any errors
     catch (e) {
       showDialog(
-        context: context, 
-        builder: (context) => AlertDialog(
-          title: Text(e.toString()),
-        )
+        context: context,
+        builder: (context) => AlertDialog(title: Text(e.toString())),
       );
     }
-
   }
 
   @override
@@ -46,14 +44,13 @@ class LoginScreen extends StatelessWidget {
           children: [
             // logo
             Icon(
-              Icons.message, 
+              Icons.message,
               size: 60,
               color: Theme.of(context).colorScheme.primary,
-
             ),
 
-            const SizedBox(height: 50,),
-        
+            const SizedBox(height: 50),
+
             // welcome back message
             Text(
               "Welcome Back You've missed",
@@ -63,41 +60,45 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 25,),
+            const SizedBox(height: 25),
             // email textfeild
             MyTextfeild(
-              hintText: 'Email', 
-              obscureText: false, 
-              controller: _emailTEcontroller
+              hintText: 'Email',
+              obscureText: false,
+              controller: _emailTEcontroller,
             ),
 
-            const SizedBox(height: 10,),
-            
+            const SizedBox(height: 10),
+
             // password textfeild
             MyTextfeild(
               hintText: 'Password',
               obscureText: true,
-              controller: _passwordTEcontroller
+              controller: _passwordTEcontroller,
             ),
 
-            const SizedBox(height: 25,),
-        
+            const SizedBox(height: 25),
+
             // login button
             MyButtons(buttonTitle: 'Login', onTap: () => login(context)),
 
-            const SizedBox(height: 25,),
-        
+            const SizedBox(height: 25),
+
             // register now
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Not a member?", style: TextStyle(
+                Text(
+                  "Not a member?",
+                  style: TextStyle(
                     color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
                 GestureDetector(
                   onTap: onTap,
-                  child: Text(" Register now", style: TextStyle(
+                  child: Text(
+                    " Register now",
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).colorScheme.inversePrimary,
                     ),
