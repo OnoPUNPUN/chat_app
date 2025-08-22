@@ -24,9 +24,9 @@ class LoginScreen extends StatelessWidget {
         _passwordTEcontroller.text,
       );
 
-      Navigator.pop(context); // close loading
+      Navigator.pop(context);
     } catch (e) {
-      Navigator.pop(context); // close loading first
+      Navigator.pop(context);
       String errorMessage = getAuthErrorMessage(
         e.toString().replaceAll("Exception: ", ""),
       );
