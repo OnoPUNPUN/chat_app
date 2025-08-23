@@ -1,5 +1,5 @@
-import 'package:chat_app/auth/auth_service.dart';
-import 'package:chat_app/auth/error_handler.dart';
+import 'package:chat_app/services/auth/auth_service.dart';
+import 'package:chat_app/services/auth/error_handler.dart';
 import 'package:chat_app/widgets/my_buttons.dart';
 import 'package:chat_app/widgets/my_textfeild.dart';
 

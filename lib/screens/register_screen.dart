@@ -1,5 +1,5 @@
-import 'package:chat_app/auth/auth_service.dart';
-import 'package:chat_app/auth/error_handler.dart';
+import 'package:chat_app/services/auth/auth_service.dart';
+import 'package:chat_app/services/auth/error_handler.dart';
 import 'package:chat_app/widgets/my_buttons.dart';
 import 'package:chat_app/widgets/my_textfeild.dart';
 import 'package:email_validator/email_validator.dart';
@@ -16,14 +16,14 @@ class RegisterScreen extends StatelessWidget {
   RegisterScreen({super.key, required this.onTap});
 
   void register(BuildContext context) async {
-    final _auth = AuthService();
+    final auth = AuthService();
 
     if (_passwordTEcontroller.text == _confirmPasswordTEcontroller.text &&
         EmailValidator.validate(_emailTEcontroller.text)) {
       try {
         showLoadingDialog(context);
 
-        await _auth.signUpWithEmailPassword(
+        await auth.signUpWithEmailPassword(
           _emailTEcontroller.text,
           _passwordTEcontroller.text,
         );
