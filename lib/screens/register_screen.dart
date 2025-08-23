@@ -27,10 +27,14 @@ class RegisterScreen extends StatelessWidget {
           _emailTEcontroller.text,
           _passwordTEcontroller.text,
         );
-
-        Navigator.pop(context); // close loading
+        if (context.mounted) {
+          Navigator.pop(context);
+        }
+        // close loading
       } catch (e) {
-        Navigator.pop(context); // close loading first
+        if (context.mounted) {
+          Navigator.pop(context);
+        } // close loading first
         String errorMessage = getAuthErrorMessage(
           e.toString().replaceAll("Exception: ", ""),
         );
