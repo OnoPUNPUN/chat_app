@@ -19,7 +19,7 @@ class HomeScreen extends StatelessWidget {
         title: Text(
           'Home Screen',
           style: TextStyle(
-            color: Theme.of(context).colorScheme.secondary,
+            color: Theme.of(context).colorScheme.inversePrimary,
             fontWeight: FontWeight.bold,
             fontSize: 20,
           ),
@@ -27,16 +27,17 @@ class HomeScreen extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.primary,
         iconTheme: IconThemeData(color: Theme.of(context).colorScheme.surface),
-        elevation: 4, // adds shadow for better depth
+        elevation: 4,
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(16), // nice rounded bottom
-          ),
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
         ),
       ),
 
       drawer: const MyDrawer(),
-      body: _buildUserList(),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 8.0),
+        child: _buildUserList(),
+      ),
     );
   }
 

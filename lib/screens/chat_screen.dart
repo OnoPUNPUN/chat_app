@@ -40,7 +40,7 @@ class ChatScreen extends StatelessWidget {
         title: Text(
           recviverEmail,
           style: TextStyle(
-            color: Theme.of(context).colorScheme.secondary,
+            color: Theme.of(context).colorScheme.inversePrimary,
             fontWeight: FontWeight.bold,
             fontSize: 20,
           ),
