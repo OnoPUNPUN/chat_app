@@ -5,28 +5,68 @@ import 'package:chat_app/widgets/my_textfeild.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class ChatScreen extends StatelessWidget {
+class ChatScreen extends StatefulWidget {
   final String recviverEmail;
   final String recviverID;
 
-  ChatScreen({
+  const ChatScreen({
     super.key,
     required this.recviverEmail,
     required this.recviverID,
   });
 
+  @override
+  State<ChatScreen> createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _messageTEController = TextEditingController();
 
   // chat & auth services
   final ChatService _chatService = ChatService();
+
   final AuthService _authService = AuthService();
+
+  // for textfield focus
+  FocusNode myFocuseNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+
+    // add listner to focus node
+    myFocuseNode.addListener(() {
+      if (myFocuseNode.hasFocus) {
+        // cause a delay so that keyboar has time to show up,
+        // then the amount of remaining space will be calculated
+        // then scroll down
+        Future.delayed(const Duration(milliseconds: 500), () => scrollDown());
+      }
+    });
+
+    // wait a bit for listview to built, then scroll to bottom
+    Future.delayed(const Duration(milliseconds: 500), () => scrollDown());
+  }
+
+  // scroll controller
+  final ScrollController _scrollController = ScrollController();
+  void scrollDown() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: const Duration(seconds: 1),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
 
   // send message
   void sendMessage() async {
     // if there is something inside the textfield
     if (_messageTEController.text.isNotEmpty) {
       // send the message
-      await _chatService.sendMessage(recviverID, _messageTEController.text);
+      await _chatService.sendMessage(
+        widget.recviverID,
+        _messageTEController.text,
+      );
 
       // clear the controller
       _messageTEController.clear();
@@ -38,7 +78,7 @@ class ChatScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          recviverEmail,
+          widget.recviverEmail,
           style: TextStyle(
             color: Theme.of(context).colorScheme.inversePrimary,
             fontWeight: FontWeight.bold,
@@ -66,11 +106,10 @@ class ChatScreen extends StatelessWidget {
   }
 
   // build message list
-
   Widget _buildMessageList() {
     String senderID = _authService.getCurrentUser()!.uid;
     return StreamBuilder(
-      stream: _chatService.getMessage(recviverID, senderID),
+      stream: _chatService.getMessage(widget.recviverID, senderID),
       builder: (context, snapshot) {
         // errors
         if (snapshot.hasError) {
@@ -84,6 +123,7 @@ class ChatScreen extends StatelessWidget {
 
         // return list view
         return ListView(
+          controller: _scrollController,
           children: snapshot.data!.docs
               .map((doc) => _buildMessageItem(doc))
               .toList(),
@@ -126,6 +166,7 @@ class ChatScreen extends StatelessWidget {
           // textfield should take up most of the space
           Expanded(
             child: MyTextfeild(
+              focusNode: myFocuseNode,
               hintText: "Type a message",
               obscureText: false,
               controller: _messageTEController,
