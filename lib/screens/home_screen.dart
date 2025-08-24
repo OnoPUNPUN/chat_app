@@ -78,8 +78,10 @@ class HomeScreen extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) =>
-                  ChatScreen(recviverEmail: userData["email"]),
+              builder: (context) => ChatScreen(
+                recviverEmail: userData["email"],
+                recviverID: userData["uid"],
+              ),
             ),
           );
         },
