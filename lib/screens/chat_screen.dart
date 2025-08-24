@@ -7,6 +7,26 @@ class ChatScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: Text(recviverEmail)));
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          recviverEmail,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.secondary,
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.surface),
+        elevation: 4, // adds shadow for better depth
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(16), // nice rounded bottom
+          ),
+        ),
+      ),
+    );
   }
 }
